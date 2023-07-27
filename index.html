@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Pie Flavor Comparison Tool</title>
+        <meta name="viewport" content="width: maximum-scale, initial-scale: 1">
+        <style>
+            body {
+                background-color: rgb(255, 219, 205);
+                font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+                padding: 0;
+                margin: 0;
+                margin-bottom: 30px;
+            }
+            @keyframes stupid-colors {
+                0% {
+                    filter: hue-rotate(0deg) brightness(1.2);
+                    transform: scale(1);
+                }
+                20% {
+                    filter: hue-rotate(120deg) brightness(1.5);
+                    transform: scale(1.01);
+                }
+                40% {
+                    filter: hue-rotate(360deg) brightness(1);
+                    transform: scale(0.99);
+                }
+                45% {
+                    transform: scale(0.99);
+                }
+                60% {
+                    filter: hue-rotate(240deg) brightness(1.5);
+                    transform: scale(1.01);
+                }
+                80% {
+                    filter: hue-rotate(120deg) brightness(2);
+                    transform: scale(0.99);
+                }
+                100% {
+                    filter: hue-rotate(0deg) brightness(1.2);
+                    transform: scale(1.01);
+                }
+            }
+            @keyframes seizure-colors {
+                0% {
+                    filter: hue-rotate(0deg);
+                    transform: scaleX(1)  scaleY(1) skew(0deg, 0deg);
+                }
+                25% {
+                    filter: hue-rotate(-40deg);
+                    transform: scaleX(1.2) scaleY(1.33)  skew(-10deg, 0deg);
+                }
+                50% {
+                    filter: hue-rotate(300deg)  brightness(2);
+                    transform: scaleX(1) scaleY(1.33) skew(10deg, 0deg);
+                }
+                75% {
+                    filter: hue-rotate(60deg);
+                    transform: scaleX(1.2) scaleY(1) skew(-4deg, 0deg);
+                }
+                100% {
+                    filter: hue-rotate(100deg) brightness(2);
+                    transform: scaleX(1) scaleY(1);
+                }
+            }
+
+            .header .logo_container {
+                position: relative;
+                --width: clamp(8vw, 170px, 30vw);
+                width: var(--width);
+                height: calc(calc(var(--width) / 293) * 131);
+                aspect-ratio: 131/293;
+                margin: 0px auto;
+                left: 0;
+                transition: left 0.2s;
+            }
+            .header .logo_container * {
+                position: absolute;
+                left: 0px;
+                top: 0px;
+                width: 100%;
+                height: 100%;
+                z-index: 998;
+            }
+            .header .logo_container .logo_text {
+                animation: stupid-colors 30s infinite;
+                transition: filter 1s;
+                transform-origin: 75% 50%;
+                z-index: 997;
+            }
+            .header .logo_container .logo_normal {
+                opacity: 1;
+                transition: opacity 0.2s;
+            }
+            .header .logo_container.hover {
+                left: -35px;
+            }
+            .header .logo_container.hover .logo_normal {
+                opacity: 0;
+            }
+            .header .logo_container.hover .logo_text {
+                animation: seizure-colors 0.1s infinite;
+                transition: all 0.1s;
+                height: 100vh;
+                backdrop-filter: blur(4px);
+                background-color: rgba(0, 0, 0, 0.05);
+                width: 900%;
+                left: -850px;
+            }
+
+            .flavors {
+                margin: 0 auto;
+                width: 88vw;
+                display: flex;
+                background-color: rgb(255, 249, 244);
+                border-radius: 15px;
+                box-shadow: 0px 0px 12px 1px rgba(176, 97, 33, 0.194)
+            }
+            .flavors .flavor {
+                width: clamp(0px, 22vw, 25%);
+                height: calc(100vh - 125px);
+                justify-content: space-between;
+                padding: 30px;
+            }
+            .flavors .flavor:not(:last-child) {
+                border-right: 2px solid rgb(243, 177, 124);
+            }
+            .flavors .flavor .title {
+                font-size: 25px;
+                margin: 0;
+                padding: 0;
+                margin-bottom: 15px;
+            }
+            .welcome {
+                width: 100vw;
+                height: 100vh;
+                position: fixed;
+                background-color: rgba(255, 255, 255, 0.45);
+                backdrop-filter: blur(15px);
+                z-index: 999;
+            }
+            .welcome .notice {
+                background-color: rgba(255, 255, 255, 1);
+                box-shadow: 0px 0px 30px 1px rgba(0, 0, 0, 0.15);
+                border-radius: 15px;
+                width: clamp(200px, 45vw, 650px);
+                aspect-ratio: 5/2;
+                padding: 20px 30px;
+                cursor: pointer;
+                position: relative;
+                top: 50%;
+                transform: translateY(-50%);
+                margin: auto auto;
+            }
+            .welcome .notice button {
+                width: 105px;
+                height: 30px;
+                padding: 5px 10px;
+                border-radius: 8px;
+                border: 1px solid rgb(224, 224, 224);
+                background-color: #f9f9f9;
+                text-transform: uppercase;
+                font-weight: 600;
+                font-size: 15px;
+            }
+            #video {
+                max-width: 400px;
+                width: 45vw;
+                height: auto;
+                aspect-ratio: 4/2.5;
+                object-fit: cover;
+                object-position: right center;
+                position: fixed;
+                overflow: hidden;
+                right: 0;
+                bottom: 0;
+            }
+            .review {
+                margin: 15px 0px;
+            }
+            .review .name {
+                font-weight: 600;
+                margin-bottom: 5px;
+            }
+            .review .text {
+                margin: 8px 0px;
+            }
+            textarea {
+                height: 100px;
+                width: calc(100% - 10px);
+            }
+            .fakead {
+                margin-left: 7vw;
+                margin-top: 40px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="welcome" onclick='welcomeClick(this);'>
+            <div class="notice">
+                <h2>Welcome! Let's choose a pie flavor.</h2>
+                <p>To enter the website, you must allow JavaScript features. Check your volume before continuing, I apoligize in advance. Click anywhere to continue.</p>
+                <button>Let's Go!</button>
+            </div>
+        </div>
+        <div class="header">
+            <div class="logo_container" onmouseenter="imageHover(this);">
+                <img class="logo_normal" src="./assets/PFCT_logo.png" alt="Pie Flavor Comparison Tool Logo #1"/>
+                <img class="logo_text" src="./assets/PFCT_logo_colors.png" alt="Pie Flavor Comparison Tool Logo #2"/>
+            </div>
+        </div>
+        <video src="./assets/by_the_book.mp4" id="video" autoplay="off" alt="Lazy Town - Cooking by the Book (ft. Lil Jon)"></video>
+        <div class="flavors">
+            <div class="flavor">
+                <h1 class="title">Pumpkin</h1>
+                <div class="review">
+                    <span class="name">Janet Jackson</span>
+                    <p class="text">This shit bussin! On god, I recommend Pumpkin Pie over all other flavors? What about ya'll.</p>
+                </div>
+                <div class="review">
+                    <span class="name">Donna Summers</span>
+                    <p class="text">I have not ever tried this delicacy. I have no comments.</p>
+                </div>
+                <div class="review">
+                    <span class="name">Donald Trump</span>
+                    <p class="text"><i>We reached out for a comment, but we did not receive one.</i></p>
+                </div>
+            </div>
+            <div class="flavor">
+                <h1 class="title">Cherry</h1>
+                <div class="review">
+                    <span class="name">Katy Perry</span>
+                    <p class="text">I've kissed a girl... [I had to taste it.] Cherry [pie... is my favorite!] <i>(this is her favorite pie flavor).</i></p>
+                </div>
+                <div class="review">
+                    <span class="name">Doja Cat</span>
+                    <p class="text"><i>[It] tastes just like candy, so sweet, but [the pie] knows it ain't real.</i></p>
+                </div>
+                <div class="review">
+                    <span class="name">J.K. Rowling</span>
+                    <p class="text">Unfortunately, I cannot think of an offensive joke to pair with my commentary so I will not provide any response.</p>
+                </div>
+            </div>
+            <div class="flavor">
+                <h1 class="title">Apple</h1>
+                <div class="review">
+                    <span class="name">Steve Jobs</span>
+                    <p class="text">There's just something so unique about putting Macintoshes in pie! I love it.</p>
+                </div>
+                <div class="review">
+                    <span class="name">Tim Cook</span>
+                    <p class="text">Same as Steve, I love Apple! I love Cook-ing with them. [Apple Pie is the best flavor!]</p>
+                </div>
+                <div class="review">
+                    <span class="name">Martha Stewart</span>
+                    <p class="text">It's delicious, as so long as you place it in the me-cro-wav-aye! With just "one splash of vodka."</p>
+                </div>
+            </div>
+            <div class="flavor">
+                <h1 class="title">Keylime</h1>
+                <textarea placeholder="There are no reviews for this vile creature. Be the first to leave one, however you will be hated forever."></textarea>
+            </div>
+        </div>
+        <img class="fakead" src="https://shonellerton.com/wp-content/uploads/posts/2018/20180607-web-design-practices-guaranteed-to-frustrate/y2018m06d07_web_design_practices_guaranteed_to_frustrate_popup1.png"/>
+        <script src="./assets/howler.js"></script>
+        <script>
+            var sound = null;
+
+            function welcomeClick(that) {
+                sound = new Howl({
+                    src: ['assets/among_us.mp3']
+                });
+                that.style.display="none";
+                playVideo();
+            }
+
+            function imageHover(that) {
+                if(!sound) return;
+                pauseVideo();
+                sound.play();
+                that.classList.add("hover");
+                setTimeout(() => {
+                    that.classList.remove("hover");
+                    playVideo();
+                }, 3500);
+            }
+
+            let video = document.getElementById("video");
+            let getStartGen = 3.5;
+
+            if(window.localStorage.getItem("PAUSED_AT") != null) {
+                getStartGen = window.localStorage.getItem("PAUSED_AT");
+            } else {
+                window.localStorage.setItem("PAUSED_AT", 3.5);
+            }
+            video.currentTime = getStartGen;
+
+            function saveStartTime() {
+                if(video.currentTime > video.duration-5) video.currentTime = 3.5;
+                window.localStorage.setItem("PAUSED_AT", video.currentTime);
+                console.log(window.localStorage);
+            }
+
+            setInterval(() => {
+                saveStartTime()
+            }, 2000);
+
+            function playVideo() {
+                video.currentTime = getStartGen;
+                saveStartTime();
+                video.play();
+            }
+
+            function pauseVideo() {
+                video.pause();
+                saveStartTime();
+            }
+
+            window.onbeforeunload = () => {
+                pauseVideo();
+            }
+        </script>
+    </body>
+</html>
